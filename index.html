@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ahron John Sahagun | Portfolio</title>
+  <meta name="description" content="Portfolio of Ahron John Sahagun, Computer Science student.">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5c6070;
+      --border: #e4e6ef;
+      --accent: #5b5bf0;
+      --accent-2: #a855f7;
+      --radius: 14px;
+    }
+    :root[data-theme="dark"] {
+      --bg: #0d0f1a;
+      --surface: #151829;
+      --text: #eef0ff;
+      --muted: #9aa0bd;
+      --border: #262a45;
+      --accent: #8b8bff;
+      --accent-2: #c084fc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      transition: background .3s, color .3s;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 1.25rem; }
+    section { padding: 5rem 0 2rem; }
+    h2 { font-size: 1.8rem; margin-bottom: 1.5rem; }
+    h2::after {
+      content: ""; display: block; width: 48px; height: 4px; margin-top: .5rem;
+      border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    /* Navigation */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+    .logo { font-weight: 800; font-size: 1.15rem; color: var(--text); }
+    .nav-links { display: flex; gap: 1.4rem; align-items: center; }
+    .nav-links a { color: var(--muted); font-weight: 500; font-size: .95rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    #theme-toggle {
+      background: var(--surface); border: 1px solid var(--border); color: var(--text);
+      width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.05rem;
+    }
+
+    /* Hero */
+    .hero { padding: 6rem 0 3rem; }
+    .hero .tag {
+      display: inline-block; padding: .3rem .85rem; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--muted); font-size: .85rem; margin-bottom: 1.2rem;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: 1.15; margin-bottom: 1rem; }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .hero p { max-width: 580px; color: var(--muted); font-size: 1.1rem; margin-bottom: 2rem; }
+    .btn {
+      display: inline-block; padding: .75rem 1.5rem; border-radius: 10px; font-weight: 600;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn:hover { transform: translateY(-2px); text-decoration: none; }
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2)); color: #fff;
+      box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .btn-ghost { border: 1px solid var(--border); color: var(--text); margin-left: .6rem; background: var(--surface); }
+
+    /* Skills */
+    .chips { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .chip {
+      padding: .45rem 1rem; border-radius: 999px; background: var(--surface);
+      border: 1px solid var(--border); font-size: .92rem; font-weight: 500;
+    }
+
+    /* Project cards */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.4rem; display: flex; flex-direction: column; gap: .6rem;
+      transition: transform .2s, box-shadow .2s, border-color .2s; color: var(--text);
+    }
+    .card:hover {
+      transform: translateY(-4px); border-color: var(--accent); text-decoration: none;
+      box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .card h3 { font-size: 1.05rem; }
+    .card p { color: var(--muted); font-size: .92rem; flex: 1; }
+    .meta { display: flex; gap: 1rem; font-size: .82rem; color: var(--muted); }
+    .status { color: var(--muted); }
+
+    /* Contact + footer */
+    .contact-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2.2rem; text-align: center;
+    }
+    .contact-box p { color: var(--muted); margin-bottom: 1.4rem; }
+    footer { text-align: center; padding: 3rem 0 2rem; color: var(--muted); font-size: .88rem; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 600px) {
+      .nav-links a:not(#theme-toggle) { display: none; }
+      .btn-ghost { margin: .6rem 0 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="#" class="logo" id="logo-text">AJ.</a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+        <button id="theme-toggle" aria-label="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <span class="tag" id="location-tag">📍 Baguio City, Philippines</span>
+      <h1>Hi, I'm <span class="gradient-text" id="name">Ahron John Sahagun</span>.<br><span id="headline">I build things with code.</span></h1>
+      <p id="intro">Short introduction goes here.</p>
+      <a href="#projects" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </header>
+
+  <section id="about" class="reveal">
+    <div class="container">
+      <h2>About &amp; Skills</h2>
+      <p style="color: var(--muted); max-width: 680px; margin-bottom: 1.5rem;" id="about-text"></p>
+      <div class="chips" id="skills"></div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="grid" id="project-grid"><p class="status">Loading projects…</p></div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <div class="container">
+      <h2>Contact</h2>
+      <div class="contact-box">
+        <p>Open to collaborations, internships, and new ideas.</p>
+        <a class="btn btn-primary" id="email-btn" href="#">Send an email</a>
+        <a class="btn btn-ghost" id="gh-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>© <span id="year"></span> <span id="footer-name"></span>. Built with HTML, CSS, and JS.</footer>
+
+  <script>
+    /* ===== CONFIG: edit this block only ===== */
+    const CONFIG = {
+      githubUser: "ahronjohnsahagun",
+      name: "Ahron John Sahagun",
+      initials: "AJ",
+      location: "Baguio City, Philippines",
+      headline: "I build things with code.",
+      intro: "Computer Science student at Saint Louis University, building academic projects in Java and beyond.",
+      about: "Write two or three sentences about your background, what you are studying, and what you enjoy building.",
+      skills: ["Java", "JavaFX", "Swing", "Data Structures", "Git & GitHub"],
+      email: "your-email@example.com",
+      maxRepos: 9,
+      hideRepos: [],
+      pinnedRepos: []
+    };
+    /* ======================================== */
+
+    // Fill in static text
+    const $ = (id) => document.getElementById(id);
+    document.title = `${CONFIG.name} | Portfolio`;
+    $("name").textContent = CONFIG.name;
+    $("logo-text").textContent = CONFIG.initials + ".";
+    $("location-tag").textContent = "📍 " + CONFIG.location;
+    $("headline").textContent = CONFIG.headline;
+    $("intro").textContent = CONFIG.intro;
+    $("about-text").textContent = CONFIG.about;
+    $("footer-name").textContent = CONFIG.name;
+    $("year").textContent = new Date().getFullYear();
+    $("email-btn").href = "mailto:" + CONFIG.email;
+    $("gh-btn").href = "https://github.com/" + CONFIG.githubUser;
+    $("skills").innerHTML = CONFIG.skills.map(s => `<span class="chip">${s}</span>`).join("");
+
+    // Theme: saved choice, otherwise system preference
+    const root = document.documentElement;
+    let saved = null;
+    try { saved = localStorage.getItem("theme"); } catch (e) {}
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = saved || (prefersDark ? "dark" : "light");
+    $("theme-toggle").addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+
+    // Load repositories from the GitHub API
+    const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+    async function loadRepos() {
+      const grid = $("project-grid");
+      try {
+        const res = await fetch(`https://api.github.com/users/${CONFIG.githubUser}/repos?per_page=100&sort=updated`);
+        if (!res.ok) throw new Error(res.status);
+        let repos = (await res.json())
+          .filter(r => !r.fork && !CONFIG.hideRepos.includes(r.name) && r.name.toLowerCase() !== `${CONFIG.githubUser.toLowerCase()}.github.io`);
+
+        // Pinned first, then by stars, then recency
+        const rank = (r) => CONFIG.pinnedRepos.includes(r.name) ? -1 : 0;
+        repos.sort((a, b) => rank(a) - rank(b) || b.stargazers_count - a.stargazers_count ||
+                             new Date(b.pushed_at) - new Date(a.pushed_at));
+        repos = repos.slice(0, CONFIG.maxRepos);
+
+        if (!repos.length) { grid.innerHTML = '<p class="status">No public repositories yet.</p>'; return; }
+
+        grid.innerHTML = repos.map(r => `
+          <a class="card" href="${esc(r.html_url)}" target="_blank" rel="noopener">
+            <h3>${esc(r.name)}</h3>
+            <p>${esc(r.description || "No description provided.")}</p>
+            <div class="meta">
+              ${r.language ? `<span>● ${esc(r.language)}</span>` : ""}
+              <span>★ ${r.stargazers_count}</span>
+            </div>
+          </a>`).join("");
+      } catch (err) {
+        grid.innerHTML = `<p class="status">Projects could not be loaded. Visit
+          <a href="https://github.com/${esc(CONFIG.githubUser)}">GitHub</a> instead.</p>`;
+      }
+    }
+    loadRepos();
+
+    // Fade-in on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+  </script>
+</body>
+</html>

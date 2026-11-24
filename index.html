@@ -25,20 +25,41 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: var(--sans);
-      background:
-        radial-gradient(900px 500px at 85% -10%, rgba(111,139,255,.14), transparent 60%),
-        radial-gradient(700px 500px at -10% 30%, rgba(95,245,192,.08), transparent 60%),
-        var(--bg);
-      background-attachment: fixed;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.65;
+      overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
     .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.4rem; }
     .label { font-family: var(--mono); font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 
+    /* ===== Animated background ===== */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; will-change: transform; }
+    .orb.o1 { width: 520px; height: 520px; top: -140px; right: -100px; background: rgba(111,139,255,.30); animation: drift1 24s ease-in-out infinite alternate; }
+    .orb.o2 { width: 460px; height: 460px; top: 30%; left: -140px; background: rgba(95,245,192,.20); animation: drift2 30s ease-in-out infinite alternate; }
+    .orb.o3 { width: 380px; height: 380px; bottom: -120px; right: 20%; background: rgba(255,122,89,.14); animation: drift3 27s ease-in-out infinite alternate; }
+    @keyframes drift1 { to { transform: translate(-220px, 260px) scale(1.2); } }
+    @keyframes drift2 { to { transform: translate(300px, -180px) scale(1.15); } }
+    @keyframes drift3 { to { transform: translate(-260px, -200px) scale(1.25); } }
+    .grid-bg {
+      position: absolute; inset: -60px;
+      background-image:
+        linear-gradient(rgba(95,245,192,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(95,245,192,.045) 1px, transparent 1px);
+      background-size: 60px 60px;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+      mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+      animation: gridmove 14s linear infinite;
+    }
+    @keyframes gridmove { to { transform: translate(60px, 60px); } }
+    #bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    main, footer { position: relative; z-index: 1; }
+
     /* Navigation */
-    nav { position: sticky; top: 0; z-index: 10; background: rgba(10,14,20,.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(10,14,20,.7); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
     nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 60px; }
     .brand { font-family: var(--mono); font-weight: 500; }
     .brand span { color: var(--mint); }
@@ -54,7 +75,7 @@
     }
     .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--mint), var(--blue)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero p.intro { color: var(--muted); font-size: 1.08rem; max-width: 520px; margin-bottom: 1.8rem; }
-    .btn { display: inline-block; font-family: var(--mono); font-size: .85rem; padding: .8rem 1.3rem; border: 1px solid var(--line); border-radius: 6px; transition: all .2s; }
+    .btn { display: inline-block; font-family: var(--mono); font-size: .85rem; padding: .8rem 1.3rem; border: 1px solid var(--line); border-radius: 6px; transition: all .2s; background: rgba(10,14,20,.4); }
     .btn:hover { border-color: var(--mint); color: var(--mint); transform: translateY(-2px); }
     .btn.fill { background: var(--mint); color: #04130d; border-color: var(--mint); font-weight: 500; }
     .btn.fill:hover { color: #04130d; box-shadow: 0 8px 24px rgba(95,245,192,.28); }
@@ -69,7 +90,7 @@
     .no-photo .fallback { display: flex; }
 
     /* Info strip */
-    .strip { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+    .strip { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 12px; background: rgba(16,22,31,.85); }
     .strip div { padding: 1.1rem 1.3rem; border-right: 1px solid var(--line); }
     .strip div:last-child { border-right: 0; }
     .strip b { display: block; font-weight: 500; margin-top: .2rem; font-size: .95rem; }
@@ -79,11 +100,11 @@
     h2 { font-size: 2rem; letter-spacing: -.02em; margin: .4rem 0 1.6rem; }
     .about-text { color: var(--muted); max-width: 680px; margin-bottom: 1.4rem; }
     .skills { display: flex; flex-wrap: wrap; gap: .55rem; }
-    .skills span { font-family: var(--mono); font-size: .8rem; padding: .35rem .8rem; border: 1px solid var(--line); border-radius: 6px; color: var(--text); }
+    .skills span { font-family: var(--mono); font-size: .8rem; padding: .35rem .8rem; border: 1px solid var(--line); border-radius: 6px; color: var(--text); background: rgba(10,14,20,.4); }
     .skills span::before { content: "▪ "; color: var(--mint); }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.1rem; }
-    .card { display: flex; flex-direction: column; gap: .6rem; padding: 1.4rem; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; transition: transform .2s, border-color .2s; }
+    .card { display: flex; flex-direction: column; gap: .6rem; padding: 1.4rem; background: rgba(16,22,31,.88); border: 1px solid var(--line); border-radius: 12px; transition: transform .2s, border-color .2s; }
     a.card:hover { transform: translateY(-4px); border-color: var(--mint); }
     .card h3 { font-size: 1.1rem; }
     .card p { color: var(--muted); font-size: .92rem; flex: 1; }
@@ -91,7 +112,7 @@
     .card .feat { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; color: var(--coral); text-transform: uppercase; }
     .note { color: var(--muted); font-family: var(--mono); font-size: .85rem; }
 
-    .contact { text-align: center; padding: 3rem 1.5rem; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    .contact { text-align: center; padding: 3rem 1.5rem; border: 1px solid var(--line); border-radius: 16px; background: rgba(16,22,31,.88); }
     .contact p { color: var(--muted); margin-bottom: 1.5rem; }
     footer { text-align: center; padding: 3rem 0 2.5rem; color: var(--muted); font-family: var(--mono); font-size: .78rem; }
 
@@ -105,10 +126,25 @@
       .strip div:nth-child(2) { border-right: 0; }
       .strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
       .links a:not(:last-child) { display: none; }
+      .orb { filter: blur(60px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb, .grid-bg { animation: none; }
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Animated background -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="grid-bg"></div>
+    <canvas id="bg"></canvas>
+  </div>
 
   <nav>
     <div class="wrap">
@@ -215,6 +251,96 @@
     $("skills").innerHTML = CONFIG.skills.map(s => `<span>${esc(s)}</span>`).join("");
     $("strip").innerHTML = CONFIG.info.map(([k, v]) =>
       `<div><span class="label">${esc(k)}</span><b>${esc(v)}</b></div>`).join("");
+
+    // Animated background: drifting particle network that reacts to the cursor
+    function initBackground() {
+      const cvs = $("bg"), ctx = cvs.getContext("2d");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const COLORS = ["95,245,192", "111,139,255", "95,245,192", "255,122,89"];
+      const LINK = 130, MOUSE_LINK = 170;
+      let w = 0, h = 0, dots = [], mouse = { x: -9999, y: -9999 }, raf = 0;
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth; h = window.innerHeight;
+        cvs.width = w * dpr; cvs.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.max(35, Math.min(110, Math.floor(w * h / 15000)));
+        dots = Array.from({ length: count }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - .5) * .45,
+          vy: (Math.random() - .5) * .45,
+          r: Math.random() * 1.6 + .8,
+          c: COLORS[Math.floor(Math.random() * COLORS.length)],
+          p: Math.random() * Math.PI * 2
+        }));
+        if (reduce) frame(0);
+      }
+
+      function frame(t) {
+        ctx.clearRect(0, 0, w, h);
+
+        for (const d of dots) {
+          if (!reduce) {
+            d.x += d.vx; d.y += d.vy;
+            if (d.x < -20) d.x = w + 20; else if (d.x > w + 20) d.x = -20;
+            if (d.y < -20) d.y = h + 20; else if (d.y > h + 20) d.y = -20;
+            // gentle push away from the cursor
+            const dx = d.x - mouse.x, dy = d.y - mouse.y, dist = Math.hypot(dx, dy);
+            if (dist < 110 && dist > 0) { d.x += dx / dist * 1.2; d.y += dy / dist * 1.2; }
+          }
+        }
+
+        // links between nearby dots
+        for (let i = 0; i < dots.length; i++) {
+          const a = dots[i];
+          for (let j = i + 1; j < dots.length; j++) {
+            const b = dots[j];
+            const dist = Math.hypot(a.x - b.x, a.y - b.y);
+            if (dist < LINK) {
+              ctx.strokeStyle = `rgba(${a.c},${(1 - dist / LINK) * .28})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            }
+          }
+          // links to the cursor
+          const md = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+          if (md < MOUSE_LINK) {
+            ctx.strokeStyle = `rgba(95,245,192,${(1 - md / MOUSE_LINK) * .55})`;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+          }
+        }
+
+        // dots with a soft pulse
+        for (const d of dots) {
+          const pulse = reduce ? 1 : .75 + .25 * Math.sin(t / 700 + d.p);
+          ctx.fillStyle = `rgba(${d.c},${.75 * pulse})`;
+          ctx.beginPath(); ctx.arc(d.x, d.y, d.r * pulse + .2, 0, Math.PI * 2); ctx.fill();
+        }
+
+        if (!reduce) raf = requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("mousemove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      window.addEventListener("touchmove", e => { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }, { passive: true });
+      window.addEventListener("mouseout", () => { mouse.x = mouse.y = -9999; });
+      window.addEventListener("touchend", () => { mouse.x = mouse.y = -9999; });
+
+      let rt;
+      window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
+
+      // pause when the tab is hidden
+      document.addEventListener("visibilitychange", () => {
+        if (reduce) return;
+        if (document.hidden) cancelAnimationFrame(raf);
+        else raf = requestAnimationFrame(frame);
+      });
+
+      resize();
+      if (!reduce) raf = requestAnimationFrame(frame);
+    }
+    initBackground();
 
     // Halftone portrait built from the photo
     function initPortrait() {

@@ -1,2 +1,2 @@
 # ahronjohnsahagun.github.io
-My personal portfolio featuring academic projects, programming experience, technical skills, and milestones throughout my journey as a Computer Science student.
+My personal portfolio showcasing academic projects, programming experience, technical skills, and key milestones in my academic and technical development as a Computer Science student.

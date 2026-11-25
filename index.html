@@ -605,7 +605,7 @@
 
         <p>Open to internships, collaborations, and new ideas.</p>
 
-        <a class="btn fill" id="email-btn" href="#">Send an email</a>
+        <a class="btn fill" id="email-btn" href="#" target="_blank" rel="noopener">Send an email</a>
         <a class="btn" id="gh-btn" href="#" target="_blank" rel="noopener">GitHub</a>
       </div>
     </section>
@@ -654,7 +654,7 @@
         "Git and GitHub Version Control"
       ],
 
-      email: "your-email@example.com", // <-- replace with your real email
+      email: "ahron.sahagun2008@gmail.com",
 
       /* ----- Featured projects (add a "link" to make a card clickable) ----- */
       featured: [
@@ -756,7 +756,9 @@
       $("footer-name").textContent = CONFIG.name;
       $("year").textContent = new Date().getFullYear();
 
-      $("email-btn").href = "mailto:" + CONFIG.email;
+      // Opens Gmail compose with the "To" field already filled in
+      $("email-btn").href =
+        "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(CONFIG.email);
       $("gh-btn").href = "https://github.com/" + CONFIG.githubUser;
 
       $("skills").innerHTML = CONFIG.skills

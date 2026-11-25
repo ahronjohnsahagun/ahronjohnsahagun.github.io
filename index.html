@@ -7,7 +7,7 @@
   <title>Ahron John Sahagun | Portfolio</title>
   <meta name="description" content="Portfolio of Ahron John Sahagun, Computer Science student.">
 
-  <!-- Apply saved/system theme before paint to avoid a flash -->
+  <!-- Theme is applied before paint to avoid a flash -->
   <script>
     try {
       var t = localStorage.getItem("theme") ||
@@ -19,339 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-  <style>
-    /* ===== 1. TOKENS: strict monochrome, two themes ===== */
-    :root {
-      --bg: #ffffff;
-      --fg: #000000;
-      --muted: #5c5c5c;
-      --line: #d4d4d4;
-      --mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
-      --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-      color-scheme: light;
-    }
-    [data-theme="dark"] {
-      --bg: #000000;
-      --fg: #ffffff;
-      --muted: #a3a3a3;
-      --line: #262626;
-      color-scheme: dark;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
-    body {
-      font-family: var(--sans);
-      font-feature-settings: "ss01", "cv11";
-      text-rendering: optimizeLegibility;
-      background: var(--bg);
-      color: var(--fg);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      transition: background .25s, color .25s;
-    }
-    a { color: inherit; text-decoration: none; }
-    ::selection { background: var(--fg); color: var(--bg); }
-    :focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
-
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
-
-    .label {
-      font-family: var(--mono);
-      font-size: .72rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    /* ===== 2. BUTTONS ===== */
-    .btn {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: .82rem;
-      padding: .8rem 1.3rem;
-      border: 1px solid var(--fg);
-      border-radius: 0;
-      background: transparent;
-      color: var(--fg);
-      cursor: pointer;
-      transition: background .15s, color .15s;
-    }
-    .btn:hover { background: var(--fg); color: var(--bg); }
-    .btn.fill { background: var(--fg); color: var(--bg); }
-    .btn.fill:hover { background: transparent; color: var(--fg); }
-
-    /* ===== 3. NAVIGATION ===== */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--line);
-    }
-    nav .wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 64px;
-    }
-    .brand { font-weight: 700; font-size: 1.1rem; letter-spacing: .08em; }
-    .nav-right { display: flex; align-items: center; gap: 1.8rem; }
-    .links { display: flex; gap: 1.6rem; }
-    .links a {
-      position: relative;
-      font-size: .9rem;
-      font-weight: 500;
-      color: var(--muted);
-      padding: .3rem 0;
-      transition: color .2s;
-    }
-    .links a:hover { color: var(--fg); }
-    .links a::after {
-      content: "";
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: 1px;
-      background: var(--fg);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .25s;
-    }
-    .links a:hover::after { transform: scaleX(1); }
-
-    /* Theme toggle */
-    .toggle {
-      width: 38px;
-      height: 38px;
-      display: grid;
-      place-items: center;
-      background: transparent;
-      color: var(--fg);
-      border: 1px solid var(--line);
-      cursor: pointer;
-      transition: border-color .2s, background .2s, color .2s;
-    }
-    .toggle:hover { border-color: var(--fg); }
-    .toggle svg {
-      width: 17px; height: 17px;
-      fill: none; stroke: currentColor;
-      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
-    }
-    .toggle .sun { display: none; }
-    [data-theme="dark"] .toggle .sun { display: block; }
-    [data-theme="dark"] .toggle .moon { display: none; }
-
-    /* ===== 4. HERO ===== */
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 3rem;
-      align-items: center;
-      padding: 5rem 0 4rem;
-    }
-    .greeting {
-      font-family: var(--mono);
-      font-size: .95rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
-    .hero h1 {
-      font-size: clamp(2.8rem, 8vw, 5.6rem);
-      line-height: .98;
-      font-weight: 600;
-      letter-spacing: -.05em;
-      min-height: 1.96em; /* reserves two lines so the layout doesn't jump while typing */
-      white-space: pre-line;
-      margin-bottom: 1.6rem;
-    }
-    .cursor {
-      display: inline-block;
-      width: .07em;
-      height: .85em;
-      margin-left: .06em;
-      background: var(--fg);
-      vertical-align: -.04em;
-      animation: blink 1s steps(1) infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .intro {
-      color: var(--muted);
-      font-size: 1.05rem;
-      max-width: 460px;
-      margin-bottom: 2rem;
-    }
-    .actions { display: flex; flex-wrap: wrap; gap: .7rem; }
-
-    .portrait-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 380px;
-      aspect-ratio: 4 / 5;
-      margin-left: auto;
-      border: 1px solid var(--fg);
-      overflow: hidden;
-    }
-    #portrait {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center 20%;
-      filter: grayscale(1) contrast(1.05);
-    }
-    .tag {
-      position: absolute;
-      left: 0; bottom: 0;
-      font-family: var(--mono);
-      font-size: .7rem;
-      padding: .35rem .7rem;
-      background: var(--fg);
-      color: var(--bg);
-    }
-    .fallback {
-      display: none;
-      position: absolute;
-      inset: 0;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      font-weight: 700;
-    }
-    .no-photo #portrait { display: none; }
-    .no-photo .fallback { display: flex; }
-
-    /* ===== 5. INFO STRIP ===== */
-    .strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid var(--fg);
-      border-bottom: 1px solid var(--line);
-    }
-    .strip div { padding: 1.2rem 1.3rem 1.2rem 0; }
-    .strip div + div { padding-left: 1.3rem; border-left: 1px solid var(--line); }
-    .strip b { display: block; font-weight: 500; margin-top: .2rem; }
-
-    /* ===== 6. SECTIONS ===== */
-    section { padding: 6rem 0 0; }
-    .sec-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      border-top: 1px solid var(--fg);
-      padding-top: .8rem;
-      margin-bottom: 2.2rem;
-    }
-    h2 {
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      font-weight: 600;
-      letter-spacing: -.035em;
-      line-height: 1.1;
-      margin-bottom: 1.4rem;
-    }
-    .about-text {
-      color: var(--muted);
-      font-size: 1.08rem;
-      line-height: 1.8;
-      max-width: 760px;
-      margin-bottom: 2.4rem;
-    }
-
-    .skills {
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      column-gap: 2.5rem;
-      border-top: 1px solid var(--line);
-    }
-    .skills li {
-      display: flex;
-      gap: 1rem;
-      padding: .85rem 0;
-      border-bottom: 1px solid var(--line);
-      font-size: .95rem;
-    }
-    .skills li span {
-      font-family: var(--mono);
-      font-size: .72rem;
-      color: var(--muted);
-      padding-top: .2rem;
-    }
-
-    /* Projects: cards share hairlines, invert on hover */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1px;
-      background: var(--line);
-      border: 1px solid var(--line);
-    }
-    .card {
-      display: flex;
-      flex-direction: column;
-      gap: .7rem;
-      min-height: 220px;
-      padding: 1.5rem;
-      background: var(--bg);
-      transition: background .15s, color .15s;
-    }
-    a.card:hover, .card:hover { background: var(--fg); color: var(--bg); }
-    .card .idx { font-family: var(--mono); font-size: .72rem; opacity: .55; }
-    .card h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -.01em; }
-    .card p { font-size: .9rem; opacity: .7; flex: 1; }
-    .card .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .4rem;
-      font-family: var(--mono);
-      font-size: .7rem;
-    }
-    .card .meta span { border: 1px solid currentColor; padding: .1rem .5rem; opacity: .8; }
-
-    /* Contact */
-    .contact { border-top: 1px solid var(--fg); padding-top: .8rem; }
-    .contact h2 { font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: -.05em; margin: 1.2rem 0; }
-    .contact p { color: var(--muted); margin-bottom: 1.8rem; max-width: 460px; }
-
-    footer {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin-top: 6rem;
-      padding: 1.5rem 0 2.5rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: .75rem;
-    }
-
-    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s, transform .6s; }
-    .reveal.visible { opacity: 1; transform: none; }
-
-    /* ===== 7. RESPONSIVE & ACCESSIBILITY ===== */
-    @media (max-width: 820px) {
-      .hero { grid-template-columns: 1fr; padding-top: 3rem; }
-      .portrait-wrap { margin: 0 auto; order: -1; max-width: 300px; }
-      .strip { grid-template-columns: 1fr; }
-      .strip div, .strip div + div { padding: 1rem 0; border-left: 0; }
-      .strip div + div { border-top: 1px solid var(--line); }
-      .skills { grid-template-columns: 1fr; }
-      .nav-right { gap: 1rem; }
-      .links { gap: 1rem; }
-    }
-    @media (max-width: 420px) {
-      .links a { font-size: .82rem; }
-      .brand { font-size: .95rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      * { transition: none !important; }
-      .cursor { animation: none; }
-      .reveal { opacity: 1; transform: none; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -381,7 +49,31 @@
       <div>
         <p class="greeting">Hi, I am</p>
         <h1 id="headline" aria-label="Ahron John G. Sahagun"><span id="typed" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span></h1>
-        <p class="intro" id="intro"></p>
+
+        <div class="intro">
+          <p>
+            I'm a
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Computer Science</span>
+            student. I build
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg>Java apps</span>
+            &amp;
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>database systems</span>,
+            and these days I'm focused on
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>data structures &amp; algorithms</span>.
+          </p>
+          <p>
+            Right now I'm building
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>school projects</span>
+            every day. I love turning
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>rough ideas</span>
+            into things people actually use.
+          </p>
+          <div class="social">
+            <a id="link-gh" href="#" target="_blank" rel="noopener">github ↗</a>
+            <a id="link-mail" href="#" target="_blank" rel="noopener">email ↗</a>
+          </div>
+        </div>
+
         <div class="actions">
           <a href="#projects" class="btn fill">View projects</a>
           <a href="#contact" class="btn">Contact me</a>
@@ -430,9 +122,7 @@
   </main>
 
   <script>
-    /* =========================================================
-       CONFIGURATION: edit your details here
-       ========================================================= */
+    /* Configuration: edit details here */
     const CONFIG = {
       githubUser: "ahronjohnsahagun",
       name: "Ahron John Sahagun",
@@ -442,7 +132,6 @@
       location: "Philippines",
 
       headline: "Ahron John G.\nSahagun",
-      intro: "I build Java applications with clean OOP design, solid data structures, and database integration.",
       about: "Hi, I'm Ahron John Sahagun, a Computer Science student at Saint Louis University in the Philippines. I enjoy working with Java, solving problems, and building applications that turn ideas into reality. I'm always looking to learn new things, improve my skills, and gain experience as I work toward becoming a Software Engineer.",
 
       info: [
@@ -466,7 +155,7 @@
 
       email: "ahron.sahagun2008@gmail.com",
 
-      /* Add a "link" to make a card clickable */
+      /* A "link" value makes a card clickable */
       projects: [
         { name: "Airline Reservation System", desc: "A Java application concept for searching flights, managing passenger details, selecting seats, and handling reservations.", tags: ["Java", "JDBC", "Collections"], link: "" },
         { name: "Student Ranking System", desc: "Manages student records and grades, then sorts and displays rankings using CSV file handling.", tags: ["Java", "File I/O", "Sorting"], link: "" },
@@ -481,17 +170,13 @@
       ]
     };
 
-    /* =========================================================
-       HELPERS
-       ========================================================= */
+    /* Helpers */
     const $ = (id) => document.getElementById(id);
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const pad = (n) => String(n + 1).padStart(2, "0");
 
-    /* =========================================================
-       THEME TOGGLE
-       ========================================================= */
+    /* Theme toggle */
     function applyTheme(theme, save) {
       document.documentElement.dataset.theme = theme;
       document.querySelector('meta[name="theme-color"]')
@@ -499,7 +184,6 @@
       $("theme-toggle").setAttribute("aria-label",
         theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
       if (save) { try { localStorage.setItem("theme", theme); } catch (e) {} }
-      window.dispatchEvent(new Event("themechange"));
     }
 
     function initTheme() {
@@ -510,7 +194,7 @@
         applyTheme(next, true);
       });
 
-      // Follow system changes until the visitor picks a theme manually
+      // Follows system changes until a theme is picked manually
       matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
         let saved = null;
         try { saved = localStorage.getItem("theme"); } catch (err) {}
@@ -518,21 +202,21 @@
       });
     }
 
-    /* =========================================================
-       STATIC CONTENT
-       ========================================================= */
+    /* Static content */
     function renderContent() {
       document.title = `${CONFIG.name} | Portfolio`;
-      $("intro").textContent = CONFIG.intro;
       $("about-text").textContent = CONFIG.about;
       $("fallback").textContent = CONFIG.initials;
       $("tag").textContent = `@${CONFIG.handle} · ${CONFIG.location}`;
       $("footer-name").textContent = CONFIG.name;
       $("year").textContent = new Date().getFullYear();
 
-      $("email-btn").href =
-        "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(CONFIG.email);
-      $("gh-btn").href = "https://github.com/" + CONFIG.githubUser;
+      const mail = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(CONFIG.email);
+      const gh = "https://github.com/" + CONFIG.githubUser;
+      $("email-btn").href = mail;
+      $("gh-btn").href = gh;
+      $("link-mail").href = mail;
+      $("link-gh").href = gh;
 
       $("skills").innerHTML = CONFIG.skills
         .map((s, i) => `<li><span>${pad(i)}</span>${esc(s)}</li>`).join("");
@@ -552,9 +236,7 @@
       }).join("");
     }
 
-    /* =========================================================
-       TYPING EFFECT (name in the hero)
-       ========================================================= */
+    /* Typing effect for the hero name */
     function initTyping() {
       const el = $("typed");
       const text = CONFIG.headline;
@@ -571,9 +253,7 @@
       })();
     }
 
-    /* =========================================================
-       PORTRAIT (plain grayscale photo, falls back to initials)
-       ========================================================= */
+    /* Portrait: falls back to initials if the image fails to load */
     function initPortrait() {
       const img = $("portrait");
       const wrap = $("portrait-wrap");
@@ -581,9 +261,7 @@
       img.src = CONFIG.photo;
     }
 
-    /* =========================================================
-       SCROLL REVEAL
-       ========================================================= */
+    /* Scroll reveal */
     function initReveal() {
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
@@ -593,9 +271,6 @@
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     }
 
-    /* =========================================================
-       INIT
-       ========================================================= */
     renderContent();
     initTheme();
     initTyping();

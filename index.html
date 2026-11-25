@@ -433,7 +433,7 @@
       name: "Ahron John Sahagun",
       handle: "ahronjohnsahagun",
       initials: "AJ",
-      photo: "photo.jpg",
+      photo: "photo.png",
       location: "Philippines",
 
       headline: "Ahron John G.\nSahagun",
@@ -567,75 +567,34 @@
     }
 
     /* =========================================================
-       HALFTONE PORTRAIT (monochrome, follows the theme)
-       Dots inside, a solid outline, and a light travelling around it.
+       DITHERED PORTRAIT (1-bit Floyd–Steinberg, black on white)
        ========================================================= */
     function initPortrait() {
       const cvs = $("portrait");
       const ctx = cvs.getContext("2d");
       const wrap = $("portrait-wrap");
-      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
       const img = new Image();
-      const COLS = 44;
-      const PAD = 0.09;
-
-      let cells = [], segs = [];
-      let w = 0, h = 0, raf = 0;
-      let ink = "#fff";
-      let dark = true;
-      let mouse = { x: -999, y: -999 };
-
-      function readTheme() {
-        dark = document.documentElement.dataset.theme === "dark";
-        ink = getComputedStyle(document.documentElement).getPropertyValue("--fg").trim() || "#fff";
-        if (reduce && cells.length) draw(0);
-      }
-      window.addEventListener("themechange", readTheme);
-      readTheme();
+      const COLS = 190; // higher = finer dots
 
       img.onerror = () => wrap.classList.add("no-photo");
       img.onload = build;
       img.src = CONFIG.photo;
 
-      function orderEdge(list) {
-        if (!list.length) return [];
-        let cur = list.reduce((a, b) => (b.y < a.y ? b : a));
-        const left = new Set(list);
-        left.delete(cur);
-        const out = [cur];
-        while (left.size) {
-          let best = null, bd = Infinity;
-          for (const c of left) {
-            const d = (c.x - cur.x) ** 2 + (c.y - cur.y) ** 2;
-            if (d < bd) { bd = d; best = c; }
-          }
-          left.delete(best);
-          out.push(best);
-          cur = best;
-        }
-        return out;
-      }
-
       function build() {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = cvs.clientWidth;
-        h = cvs.clientHeight;
+        const w = cvs.clientWidth, h = cvs.clientHeight;
         cvs.width = w * dpr;
         cvs.height = h * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        const padX = w * PAD, padY = h * PAD;
-        const step = (w - padX * 2) / COLS;
-        const rows = Math.floor((h - padY * 2) / step);
-        const ox = padX;
-        const oy = (h - rows * step) / 2;
+        const step = w / COLS;
+        const rows = Math.round(h / step);
 
+        // Downsample the photo to the dot grid (cover-crop, biased toward the top)
         const off = document.createElement("canvas");
         off.width = COLS;
         off.height = rows;
         const o = off.getContext("2d", { willReadFrequently: true });
-
         const sw = Math.min(img.width, (img.height * COLS) / rows);
         const sh = (sw * rows) / COLS;
         o.drawImage(img, (img.width - sw) / 2, (img.height - sh) * 0.2, sw, sh, 0, 0, COLS, rows);
@@ -644,112 +603,41 @@
         try { data = o.getImageData(0, 0, COLS, rows).data; }
         catch (e) { wrap.classList.add("no-photo"); return; }
 
-        const lums = [], solid = [];
-        for (let y = 0; y < rows; y++) {
-          lums[y] = []; solid[y] = [];
-          for (let x = 0; x < COLS; x++) {
-            const i = (y * COLS + x) * 4;
-            const lum = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]) / 255;
-            lums[y][x] = lum;
-            solid[y][x] = !(lum > 0.93 || data[i + 3] < 40);
-          }
+        // Grayscale with a slight contrast boost
+        const g = new Float32Array(COLS * rows);
+        for (let i = 0; i < g.length; i++) {
+          const lum = (0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2]) / 255;
+          g[i] = Math.min(1, Math.max(0, (lum - 0.05) / 0.9));
         }
 
-        const isSolid = (x, y) => {
-          if (y >= rows) return true;
-          return y >= 0 && x >= 0 && x < COLS && solid[y][x];
-        };
+        // Paper-white background with black ink, independent of the site theme
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "#000";
 
-        cells = [];
-        const edgeCells = [];
-
+        // Floyd–Steinberg dithering
         for (let y = 0; y < rows; y++) {
           for (let x = 0; x < COLS; x++) {
-            if (!solid[y][x]) continue;
-            const px = ox + (x + 0.5) * step;
-            const py = oy + (y + 0.5) * step;
-            const edge = !isSolid(x - 1, y) || !isSolid(x + 1, y) || !isSolid(x, y - 1) || !isSolid(x, y + 1);
-            if (edge) edgeCells.push({ x: px, y: py });
-            else cells.push({ x: px, y: py, lum: lums[y][x], step });
+            const i = y * COLS + x;
+            const old = g[i];
+            const val = old < 0.5 ? 0 : 1;
+            const err = old - val;
+
+            if (val === 0) {
+              const x0 = Math.round(x * step), x1 = Math.round((x + 1) * step);
+              const y0 = Math.round(y * step), y1 = Math.round((y + 1) * step);
+              ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+            }
+
+            if (x + 1 < COLS) g[i + 1] += err * 7 / 16;
+            if (y + 1 < rows) {
+              if (x > 0) g[i + COLS - 1] += err * 3 / 16;
+              g[i + COLS] += err * 5 / 16;
+              if (x + 1 < COLS) g[i + COLS + 1] += err * 1 / 16;
+            }
           }
         }
-
-        const path = orderEdge(edgeCells);
-        const maxGap = step * 1.6;
-        segs = [];
-        for (let i = 0; i < path.length; i++) {
-          const a = path[i], b = path[(i + 1) % path.length];
-          if (Math.hypot(a.x - b.x, a.y - b.y) > maxGap) continue;
-          segs.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y, u: i / path.length });
-        }
-        start();
       }
-
-      function strokeSeg(s) {
-        ctx.beginPath();
-        ctx.moveTo(s.x1, s.y1);
-        ctx.lineTo(s.x2, s.y2);
-        ctx.stroke();
-      }
-
-      function draw(t) {
-        ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = ink;
-        ctx.strokeStyle = ink;
-
-        // Dots: bigger where the image is brighter (dark mode) or darker (light mode)
-        for (const c of cells) {
-          const k = Math.max(0, 1 - Math.hypot(c.x - mouse.x, c.y - mouse.y) / 90);
-          const tone = dark ? c.lum : 1 - c.lum;
-          const r = c.step * 0.5 * (0.2 + 0.8 * Math.pow(tone, 0.8)) * (1 + k * 0.6);
-          ctx.beginPath();
-          ctx.arc(c.x, c.y, r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        // Outline
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.lineWidth = 1.6;
-        ctx.globalAlpha = 0.45;
-        for (const s of segs) strokeSeg(s);
-
-        // Travelling light
-        if (!reduce) {
-          const p = (t * 0.00018) % 1;
-          const TAIL = 0.14;
-          ctx.globalAlpha = 1;
-          for (const s of segs) {
-            const d = (p - s.u + 1) % 1;
-            if (d >= TAIL) continue;
-            const g = Math.pow(1 - d / TAIL, 1.4);
-            ctx.lineWidth = 1.6 + g * 2.4;
-            ctx.globalAlpha = 0.45 + g * 0.55;
-            strokeSeg(s);
-          }
-        }
-        ctx.globalAlpha = 1;
-      }
-
-      function loop(t) { draw(t); raf = requestAnimationFrame(loop); }
-      function start() {
-        cancelAnimationFrame(raf);
-        if (reduce) draw(0); else raf = requestAnimationFrame(loop);
-      }
-
-      function move(x, y) {
-        const b = cvs.getBoundingClientRect();
-        mouse = { x: x - b.left, y: y - b.top };
-        if (reduce) draw(0);
-      }
-      cvs.addEventListener("mousemove", (e) => move(e.clientX, e.clientY));
-      cvs.addEventListener("touchmove", (e) => move(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-      cvs.addEventListener("mouseleave", () => { mouse = { x: -999, y: -999 }; if (reduce) draw(0); });
-
-      document.addEventListener("visibilitychange", () => {
-        if (reduce || !cells.length) return;
-        if (document.hidden) cancelAnimationFrame(raf); else start();
-      });
 
       let timer;
       window.addEventListener("resize", () => {

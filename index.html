@@ -349,11 +349,11 @@
     .no-photo .fallback { display: flex; }
 
     /* =========================================================
-       6. INFO STRIP
+       6. INFO STRIP  (3 columns)
        ========================================================= */
     .strip {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       border: 1px solid var(--line);
       border-radius: 12px;
       background: rgba(10, 19, 48, .85);
@@ -540,6 +540,12 @@
         border-bottom: 1px solid var(--line);
       }
 
+      /* Third box spans the full width on phones */
+      .strip div:nth-child(3) {
+        grid-column: 1 / -1;
+        border-right: 0;
+      }
+
       .links a:not(:last-child) {
         display: none;
       }
@@ -661,19 +667,18 @@
       handle: "ahronjohnsahagun",
       initials: "AJ",
       photo: "photo.jpg",
-      location: "Baguio City",
+      location: "Philippines",
 
       headline: "I turn ideas into <em>working software.</em>",
 
       intro: "I build Java applications with clean OOP design, solid data structures, and database integration.",
 
-      about: "Hi, I'm Ahron John Sahagun, a Computer Science student at Saint Louis University in Baguio City, Philippines. I enjoy working with Java, solving problems, and building applications that turn ideas into reality. I'm always looking to learn new things, improve my skills, and gain experience as I work toward becoming a Software Engineer.",
+      about: "Hi, I'm Ahron John Sahagun, a Computer Science student at Saint Louis University in the Philippines. I enjoy working with Java, solving problems, and building applications that turn ideas into reality. I'm always looking to learn new things, improve my skills, and gain experience as I work toward becoming a Software Engineer.",
 
       info: [
-        ["Based in", "Baguio City, Philippines"],
+        ["Based in", "Philippines"],
         ["Studying", "Computer Science"],
-        ["Focus", "Java, Software Engineering"],
-        ["Status", "Open to internships"]
+        ["Focus", "Java, Software Engineering"]
       ],
 
       skills: [

@@ -261,6 +261,12 @@
     }
 
     /* Portrait */
+    @property --ang {
+      syntax: "<angle>";
+      initial-value: 0deg;
+      inherits: false;
+    }
+
     .portrait-wrap {
       position: relative;
       width: 100%;
@@ -271,14 +277,39 @@
       border-radius: 18px;
       background: var(--panel);
       overflow: hidden;
+      box-shadow: 0 0 50px rgba(95, 245, 192, .08);
     }
 
     .portrait-wrap::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 35%, rgba(95, 245, 192, .10), transparent 65%);
+      background: radial-gradient(circle at 50% 35%, rgba(95, 245, 192, .12), transparent 65%);
     }
+
+    /* Light that travels around the card border */
+    .portrait-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 18px;
+      padding: 2px;
+      background: conic-gradient(
+        from var(--ang),
+        transparent 0deg,
+        transparent 250deg,
+        var(--mint) 305deg,
+        var(--blue) 335deg,
+        transparent 360deg
+      );
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spin 5s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes spin { to { --ang: 360deg; } }
 
     #portrait {
       position: absolute;
@@ -523,7 +554,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       .orb,
-      .grid-bg {
+      .grid-bg,
+      .portrait-wrap::after {
         animation: none;
       }
 
@@ -928,23 +960,55 @@
 
     /* =========================================================
        HALFTONE PORTRAIT (built from photo.jpg)
+       With padding around the figure + light travelling
+       around the outline of the body.
        ========================================================= */
     function initPortrait() {
       const cvs = $("portrait");
       const ctx = cvs.getContext("2d");
+      const wrap = $("portrait-wrap");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       const img = new Image();
-      const COLS = 48;
+      const COLS = 44;      // dots across
+      const PAD = 0.09;     // empty space around the figure (9% of the card)
 
       let cells = [];
       let w = 0;
       let h = 0;
       let mouse = { x: -999, y: -999 };
-      let queued = false;
+      let raf = 0;
 
-      img.onerror = () => $("portrait-wrap").classList.add("no-photo");
+      img.onerror = () => wrap.classList.add("no-photo");
       img.onload = build;
       img.src = CONFIG.photo;
+
+      /* Walk along the outline so the light can follow it in order */
+      function orderEdge(list) {
+        if (!list.length) return;
+
+        let cur = list.reduce((a, b) => (b.y < a.y ? b : a));
+        const left = new Set(list);
+        left.delete(cur);
+
+        const out = [cur];
+
+        while (left.size) {
+          let best = null;
+          let bd = Infinity;
+
+          for (const c of left) {
+            const d = (c.x - cur.x) ** 2 + (c.y - cur.y) ** 2;
+            if (d < bd) { bd = d; best = c; }
+          }
+
+          left.delete(best);
+          out.push(best);
+          cur = best;
+        }
+
+        out.forEach((c, i) => { c.u = i / out.length; });
+      }
 
       function build() {
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -956,8 +1020,14 @@
         cvs.height = h * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        const step = w / COLS;
-        const rows = Math.round(h / step);
+        const padX = w * PAD;
+        const padY = h * PAD;
+
+        const step = (w - padX * 2) / COLS;
+        const rows = Math.floor((h - padY * 2) / step);
+
+        const ox = padX;
+        const oy = (h - rows * step) / 2;
 
         // Downsample the photo onto a tiny offscreen canvas
         const off = document.createElement("canvas");
@@ -986,14 +1056,18 @@
         try {
           data = o.getImageData(0, 0, COLS, rows).data;
         } catch (e) {
-          $("portrait-wrap").classList.add("no-photo");
+          wrap.classList.add("no-photo");
           return;
         }
 
-        // Turn each pixel into a dot sized by brightness
-        cells = [];
+        // Which pixels belong to the figure?
+        const lums = [];
+        const solid = [];
 
         for (let y = 0; y < rows; y++) {
+          lums[y] = [];
+          solid[y] = [];
+
           for (let x = 0; x < COLS; x++) {
             const i = (y * COLS + x) * 4;
 
@@ -1003,44 +1077,103 @@
               0.114 * data[i + 2]
             ) / 255;
 
-            if (lum > 0.93 || data[i + 3] < 40) continue;
+            lums[y][x] = lum;
+            solid[y][x] = !(lum > 0.93 || data[i + 3] < 40);
+          }
+        }
+
+        const isSolid = (x, y) =>
+          y >= 0 && y < rows && x >= 0 && x < COLS && solid[y][x];
+
+        cells = [];
+
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < COLS; x++) {
+            if (!solid[y][x]) continue;
+
+            const lum = lums[y][x];
+
+            // A cell is on the outline if any neighbour is empty
+            const edge =
+              !isSolid(x - 1, y) || !isSolid(x + 1, y) ||
+              !isSolid(x, y - 1) || !isSolid(x, y + 1);
 
             cells.push({
-              x: (x + 0.5) * step,
-              y: (y + 0.5) * step,
+              x: ox + (x + 0.5) * step,
+              y: oy + (y + 0.5) * step,
               r: step * 0.5 * (0.35 + 0.65 * Math.pow(lum, 0.7)),
-              t: y / rows
+              t: y / rows,
+              edge,
+              u: 0
             });
           }
         }
 
-        draw();
+        orderEdge(cells.filter((c) => c.edge));
+        start();
       }
 
-      function draw() {
-        queued = false;
+      function draw(t) {
         ctx.clearRect(0, 0, w, h);
+
+        // Two lights travelling around the outline, opposite each other
+        const p1 = (t * 0.00018) % 1;
+        const p2 = (p1 + 0.5) % 1;
+        const TAIL = 0.16;
 
         for (const c of cells) {
           // Dots near the cursor grow and shift color
           const k = Math.max(0, 1 - Math.hypot(c.x - mouse.x, c.y - mouse.y) / 90);
           const hue = k > 0 ? 160 - k * 140 : 160 + c.t * 70;
 
-          ctx.fillStyle = `hsl(${hue}, 90%, 62%)`;
+          let glow = 0;
+
+          if (c.edge && !reduce) {
+            for (const p of [p1, p2]) {
+              const d = (p - c.u + 1) % 1;
+              if (d < TAIL) glow = Math.max(glow, Math.pow(1 - d / TAIL, 1.5));
+            }
+          }
+
+          let light = 62;
+          let radius = c.r * (1 + k * 0.7);
+
+          if (c.edge) {
+            radius *= 1.15 + glow * 0.6;   // outline dots are slightly bigger
+            light = 62 + glow * 30;
+          }
+
+          if (glow > 0.15) {
+            ctx.shadowColor = "rgba(95,245,192,.95)";
+            ctx.shadowBlur = 14 * glow;
+          } else {
+            ctx.shadowBlur = 0;
+          }
+
+          ctx.fillStyle = `hsl(${hue}, 90%, ${light}%)`;
           ctx.beginPath();
-          ctx.arc(c.x, c.y, c.r * (1 + k * 0.7), 0, Math.PI * 2);
+          ctx.arc(c.x, c.y, radius, 0, Math.PI * 2);
           ctx.fill();
         }
+
+        ctx.shadowBlur = 0;
+      }
+
+      function loop(t) {
+        draw(t);
+        raf = requestAnimationFrame(loop);
+      }
+
+      function start() {
+        cancelAnimationFrame(raf);
+        if (reduce) draw(0);
+        else raf = requestAnimationFrame(loop);
       }
 
       function move(x, y) {
         const b = cvs.getBoundingClientRect();
         mouse = { x: x - b.left, y: y - b.top };
-
-        if (!queued) {
-          queued = true;
-          requestAnimationFrame(draw);
-        }
+        if (reduce) draw(0);
       }
 
       cvs.addEventListener("mousemove", (e) => move(e.clientX, e.clientY));
@@ -1051,7 +1184,14 @@
 
       cvs.addEventListener("mouseleave", () => {
         mouse = { x: -999, y: -999 };
-        draw();
+        if (reduce) draw(0);
+      });
+
+      // Pause when tab is hidden
+      document.addEventListener("visibilitychange", () => {
+        if (reduce || !cells.length) return;
+        if (document.hidden) cancelAnimationFrame(raf);
+        else start();
       });
 
       let resizeTimer;

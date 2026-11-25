@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b1f">
   <title>Ahron John Sahagun | Portfolio</title>
   <meta name="description" content="Portfolio of Ahron John Sahagun, Computer Science student.">
 
@@ -13,17 +14,17 @@
 
   <style>
     /* =========================================================
-       1. VARIABLES & RESET
+       1. VARIABLES & RESET  (Blue + White theme)
        ========================================================= */
     :root {
-      --bg: #0a0e14;
-      --panel: #10161f;
-      --line: #1e2733;
-      --text: #e8eef5;
-      --muted: #8593a6;
-      --mint: #5ff5c0;
-      --blue: #6f8bff;
-      --coral: #ff7a59;
+      --bg: #050b1f;        /* deep navy blue */
+      --panel: #0a1330;
+      --line: #1a2a58;
+      --text: #ffffff;      /* white */
+      --muted: #9fb2dc;     /* soft blue-white */
+      --accent: #4da3ff;    /* bright blue */
+      --accent2: #2f6bff;   /* strong blue */
+      --soft: #cfe3ff;      /* light blue-white */
       --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
       --sans: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
     }
@@ -81,26 +82,28 @@
       padding: .8rem 1.3rem;
       border: 1px solid var(--line);
       border-radius: 6px;
-      background: rgba(10, 14, 20, .4);
+      background: rgba(5, 11, 31, .4);
       transition: all .2s;
     }
 
     .btn:hover {
-      border-color: var(--mint);
-      color: var(--mint);
+      border-color: var(--accent);
+      color: #fff;
       transform: translateY(-2px);
     }
 
     .btn.fill {
-      background: var(--mint);
-      color: #04130d;
-      border-color: var(--mint);
+      background: var(--accent2);
+      color: #ffffff;
+      border-color: var(--accent2);
       font-weight: 500;
     }
 
     .btn.fill:hover {
-      color: #04130d;
-      box-shadow: 0 8px 24px rgba(95, 245, 192, .28);
+      color: #ffffff;
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(77, 163, 255, .4);
     }
 
     .note {
@@ -133,7 +136,7 @@
       height: 520px;
       top: -140px;
       right: -100px;
-      background: rgba(111, 139, 255, .30);
+      background: rgba(47, 107, 255, .38);
       animation: drift1 24s ease-in-out infinite alternate;
     }
 
@@ -142,7 +145,7 @@
       height: 460px;
       top: 30%;
       left: -140px;
-      background: rgba(95, 245, 192, .20);
+      background: rgba(77, 163, 255, .24);
       animation: drift2 30s ease-in-out infinite alternate;
     }
 
@@ -151,7 +154,7 @@
       height: 380px;
       bottom: -120px;
       right: 20%;
-      background: rgba(255, 122, 89, .14);
+      background: rgba(207, 227, 255, .14);
       animation: drift3 27s ease-in-out infinite alternate;
     }
 
@@ -163,8 +166,8 @@
       position: absolute;
       inset: -60px;
       background-image:
-        linear-gradient(rgba(95, 245, 192, .045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(95, 245, 192, .045) 1px, transparent 1px);
+        linear-gradient(rgba(77, 163, 255, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 163, 255, .06) 1px, transparent 1px);
       background-size: 60px 60px;
       -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
       mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
@@ -187,7 +190,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      background: rgba(10, 14, 20, .7);
+      background: rgba(5, 11, 31, .72);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
     }
@@ -205,7 +208,7 @@
     }
 
     .brand span {
-      color: var(--mint);
+      color: var(--accent);
     }
 
     .links {
@@ -221,7 +224,7 @@
     }
 
     .links a:hover {
-      color: var(--mint);
+      color: #ffffff;
     }
 
     /* =========================================================
@@ -242,12 +245,12 @@
       letter-spacing: -.03em;
       margin: 1rem 0 1.2rem;
       padding-left: 1.1rem;
-      border-left: 4px solid var(--mint);
+      border-left: 4px solid var(--accent);
     }
 
     .hero h1 em {
       font-style: normal;
-      background: linear-gradient(90deg, var(--mint), var(--blue));
+      background: linear-gradient(90deg, #ffffff, var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -277,14 +280,14 @@
       border-radius: 18px;
       background: var(--panel);
       overflow: hidden;
-      box-shadow: 0 0 50px rgba(95, 245, 192, .08);
+      box-shadow: 0 0 50px rgba(77, 163, 255, .14);
     }
 
     .portrait-wrap::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 35%, rgba(95, 245, 192, .12), transparent 65%);
+      background: radial-gradient(circle at 50% 35%, rgba(77, 163, 255, .16), transparent 65%);
     }
 
     /* Light that travels around the card border */
@@ -298,8 +301,8 @@
         from var(--ang),
         transparent 0deg,
         transparent 250deg,
-        var(--mint) 305deg,
-        var(--blue) 335deg,
+        var(--accent) 305deg,
+        #ffffff 340deg,
         transparent 360deg
       );
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -325,7 +328,7 @@
       font-family: var(--mono);
       font-size: .72rem;
       color: var(--muted);
-      background: rgba(10, 14, 20, .7);
+      background: rgba(5, 11, 31, .72);
       padding: .25rem .6rem;
       border-radius: 4px;
       border: 1px solid var(--line);
@@ -339,7 +342,7 @@
       justify-content: center;
       font-size: 5rem;
       font-weight: 700;
-      color: var(--mint);
+      color: var(--accent);
     }
 
     .no-photo #portrait { display: none; }
@@ -353,7 +356,7 @@
       grid-template-columns: repeat(4, 1fr);
       border: 1px solid var(--line);
       border-radius: 12px;
-      background: rgba(16, 22, 31, .85);
+      background: rgba(10, 19, 48, .85);
     }
 
     .strip div {
@@ -410,18 +413,18 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       color: var(--text);
-      background: rgba(16, 22, 31, .88);
+      background: rgba(10, 19, 48, .88);
       transition: border-color .2s, transform .2s;
     }
 
     .skills span:hover {
-      border-color: var(--mint);
+      border-color: var(--accent);
       transform: translateY(-2px);
     }
 
     .skills span::before {
       content: "▪";
-      color: var(--mint);
+      color: var(--accent);
       flex-shrink: 0;
     }
 
@@ -437,7 +440,7 @@
       flex-direction: column;
       gap: .6rem;
       padding: 1.4rem;
-      background: rgba(16, 22, 31, .88);
+      background: rgba(10, 19, 48, .88);
       border: 1px solid var(--line);
       border-radius: 12px;
       transition: transform .2s, border-color .2s;
@@ -445,7 +448,7 @@
 
     a.card:hover {
       transform: translateY(-4px);
-      border-color: var(--mint);
+      border-color: var(--accent);
     }
 
     .card h3 {
@@ -461,7 +464,7 @@
     .card .meta {
       font-family: var(--mono);
       font-size: .75rem;
-      color: var(--mint);
+      color: var(--accent);
       display: flex;
       gap: .9rem;
       flex-wrap: wrap;
@@ -471,7 +474,7 @@
       font-family: var(--mono);
       font-size: .68rem;
       letter-spacing: .12em;
-      color: var(--coral);
+      color: var(--soft);
       text-transform: uppercase;
     }
 
@@ -481,7 +484,7 @@
       padding: 3rem 1.5rem;
       border: 1px solid var(--line);
       border-radius: 16px;
-      background: rgba(16, 22, 31, .88);
+      background: rgba(10, 19, 48, .88);
     }
 
     .contact p {
@@ -805,7 +808,7 @@
     }
 
     /* =========================================================
-       ANIMATED BACKGROUND: particle network
+       ANIMATED BACKGROUND: particle network (blue + white)
        ========================================================= */
     function initBackground() {
       const cvs = $("bg");
@@ -813,7 +816,7 @@
 
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const COLORS = ["95,245,192", "111,139,255", "95,245,192", "255,122,89"];
+      const COLORS = ["77,163,255", "255,255,255", "47,107,255", "159,196,255"];
       const LINK = 130;
       const MOUSE_LINK = 170;
 
@@ -896,7 +899,7 @@
           const md = Math.hypot(a.x - mouse.x, a.y - mouse.y);
 
           if (md < MOUSE_LINK) {
-            ctx.strokeStyle = `rgba(95,245,192,${(1 - md / MOUSE_LINK) * 0.55})`;
+            ctx.strokeStyle = `rgba(207,227,255,${(1 - md / MOUSE_LINK) * 0.55})`;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(mouse.x, mouse.y);
@@ -960,8 +963,8 @@
 
     /* =========================================================
        HALFTONE PORTRAIT (built from photo.jpg)
-       With padding around the figure + light travelling
-       around the outline of the body.
+       Blue dots inside, a solid outline line on the edge,
+       and a white light travelling around that outline.
        ========================================================= */
     function initPortrait() {
       const cvs = $("portrait");
@@ -973,7 +976,8 @@
       const COLS = 44;      // dots across
       const PAD = 0.09;     // empty space around the figure (9% of the card)
 
-      let cells = [];
+      let cells = [];       // dots inside the body
+      let segs = [];        // line segments of the outline
       let w = 0;
       let h = 0;
       let mouse = { x: -999, y: -999 };
@@ -983,9 +987,9 @@
       img.onload = build;
       img.src = CONFIG.photo;
 
-      /* Walk along the outline so the light can follow it in order */
+      /* Walk along the outline in order so the light can follow it */
       function orderEdge(list) {
-        if (!list.length) return;
+        if (!list.length) return [];
 
         let cur = list.reduce((a, b) => (b.y < a.y ? b : a));
         const left = new Set(list);
@@ -1007,7 +1011,7 @@
           cur = best;
         }
 
-        out.forEach((c, i) => { c.u = i / out.length; });
+        return out;
       }
 
       function build() {
@@ -1082,81 +1086,126 @@
           }
         }
 
-        const isSolid = (x, y) =>
-          y >= 0 && y < rows && x >= 0 && x < COLS && solid[y][x];
+        // The bottom of the picture counts as "filled" so no line is drawn there
+        const isSolid = (x, y) => {
+          if (y >= rows) return true;
+          return y >= 0 && x >= 0 && x < COLS && solid[y][x];
+        };
 
         cells = [];
+        const edgeCells = [];
 
         for (let y = 0; y < rows; y++) {
           for (let x = 0; x < COLS; x++) {
             if (!solid[y][x]) continue;
 
-            const lum = lums[y][x];
+            const px = ox + (x + 0.5) * step;
+            const py = oy + (y + 0.5) * step;
 
-            // A cell is on the outline if any neighbour is empty
             const edge =
               !isSolid(x - 1, y) || !isSolid(x + 1, y) ||
               !isSolid(x, y - 1) || !isSolid(x, y + 1);
 
-            cells.push({
-              x: ox + (x + 0.5) * step,
-              y: oy + (y + 0.5) * step,
-              r: step * 0.5 * (0.35 + 0.65 * Math.pow(lum, 0.7)),
-              t: y / rows,
-              edge,
-              u: 0
-            });
+            if (edge) {
+              // Edge cells become part of the straight outline
+              edgeCells.push({ x: px, y: py, t: y / rows });
+            } else {
+              const lum = lums[y][x];
+
+              cells.push({
+                x: px,
+                y: py,
+                r: step * 0.5 * (0.35 + 0.65 * Math.pow(lum, 0.7)),
+                t: y / rows
+              });
+            }
           }
         }
 
-        orderEdge(cells.filter((c) => c.edge));
+        // Connect the ordered edge cells into one continuous line
+        const path = orderEdge(edgeCells);
+        const maxGap = step * 1.6;
+
+        segs = [];
+
+        for (let i = 0; i < path.length; i++) {
+          const a = path[i];
+          const b = path[(i + 1) % path.length];
+
+          if (Math.hypot(a.x - b.x, a.y - b.y) > maxGap) continue;
+
+          segs.push({
+            x1: a.x, y1: a.y,
+            x2: b.x, y2: b.y,
+            t: (a.t + b.t) / 2,
+            u: i / path.length
+          });
+        }
+
         start();
+      }
+
+      function strokeSeg(s) {
+        ctx.beginPath();
+        ctx.moveTo(s.x1, s.y1);
+        ctx.lineTo(s.x2, s.y2);
+        ctx.stroke();
       }
 
       function draw(t) {
         ctx.clearRect(0, 0, w, h);
+        ctx.shadowBlur = 0;
 
-        // Two lights travelling around the outline, opposite each other
-        const p1 = (t * 0.00018) % 1;
-        const p2 = (p1 + 0.5) % 1;
-        const TAIL = 0.16;
-
+        // Dots inside the body (blue, turning white near the cursor)
         for (const c of cells) {
-          // Dots near the cursor grow and shift color
           const k = Math.max(0, 1 - Math.hypot(c.x - mouse.x, c.y - mouse.y) / 90);
-          const hue = k > 0 ? 160 - k * 140 : 160 + c.t * 70;
+          const hue = 205 + c.t * 25;
+          const sat = 95 - k * 70;
+          const light = 62 + k * 34;
 
-          let glow = 0;
-
-          if (c.edge && !reduce) {
-            for (const p of [p1, p2]) {
-              const d = (p - c.u + 1) % 1;
-              if (d < TAIL) glow = Math.max(glow, Math.pow(1 - d / TAIL, 1.5));
-            }
-          }
-
-          let light = 62;
-          let radius = c.r * (1 + k * 0.7);
-
-          if (c.edge) {
-            radius *= 1.15 + glow * 0.6;   // outline dots are slightly bigger
-            light = 62 + glow * 30;
-          }
-
-          if (glow > 0.15) {
-            ctx.shadowColor = "rgba(95,245,192,.95)";
-            ctx.shadowBlur = 14 * glow;
-          } else {
-            ctx.shadowBlur = 0;
-          }
-
-          ctx.fillStyle = `hsl(${hue}, 90%, ${light}%)`;
+          ctx.fillStyle = `hsl(${hue}, ${sat}%, ${light}%)`;
           ctx.beginPath();
-          ctx.arc(c.x, c.y, radius, 0, Math.PI * 2);
+          ctx.arc(c.x, c.y, c.r * (1 + k * 0.7), 0, Math.PI * 2);
           ctx.fill();
         }
 
-        ctx.shadowBlur = 0;
+        // Solid outline
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineWidth = 2.2;
+
+        for (const s of segs) {
+          ctx.strokeStyle = `hsla(${205 + s.t * 25}, 95%, 64%, .8)`;
+          strokeSeg(s);
+        }
+
+        // Two white lights travelling around the outline, opposite each other
+        if (!reduce) {
+          const p1 = (t * 0.00018) % 1;
+          const p2 = (p1 + 0.5) % 1;
+          const TAIL = 0.16;
+
+          for (const s of segs) {
+            let glow = 0;
+
+            for (const p of [p1, p2]) {
+              const d = (p - s.u + 1) % 1;
+              if (d < TAIL) glow = Math.max(glow, Math.pow(1 - d / TAIL, 1.5));
+            }
+
+            if (glow < 0.03) continue;
+
+            const hue = 205 + s.t * 25;
+
+            ctx.shadowColor = "rgba(255,255,255,.95)";
+            ctx.shadowBlur = 16 * glow;
+            ctx.lineWidth = 2.2 + glow * 2.5;
+            ctx.strokeStyle = `hsla(${hue}, 100%, ${66 + glow * 34}%, ${0.4 + glow * 0.6})`;
+            strokeSeg(s);
+          }
+
+          ctx.shadowBlur = 0;
+        }
       }
 
       function loop(t) {

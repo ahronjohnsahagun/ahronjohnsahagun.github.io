@@ -354,31 +354,44 @@
       margin: .4rem 0 1.6rem;
     }
 
+    /* About text: full width so it lines up with the skills grid below */
     .about-text {
       color: var(--muted);
-      max-width: 680px;
-      margin-bottom: 1.4rem;
+      max-width: 100%;
+      margin-bottom: 1.8rem;
+      line-height: 1.8;
     }
 
+    /* Skills: equal-width chips in a neat grid */
     .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .55rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: .7rem;
     }
 
     .skills span {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
       font-family: var(--mono);
       font-size: .8rem;
-      padding: .35rem .8rem;
+      padding: .7rem 1rem;
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: 8px;
       color: var(--text);
-      background: rgba(10, 14, 20, .4);
+      background: rgba(16, 22, 31, .88);
+      transition: border-color .2s, transform .2s;
+    }
+
+    .skills span:hover {
+      border-color: var(--mint);
+      transform: translateY(-2px);
     }
 
     .skills span::before {
-      content: "▪ ";
+      content: "▪";
       color: var(--mint);
+      flex-shrink: 0;
     }
 
     /* Project cards */
@@ -499,6 +512,12 @@
 
       .orb {
         filter: blur(60px);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .skills {
+        grid-template-columns: 1fr;
       }
     }
 

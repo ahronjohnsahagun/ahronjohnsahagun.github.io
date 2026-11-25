@@ -18,7 +18,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     /* ===== 1. TOKENS: strict monochrome, two themes ===== */
@@ -27,8 +27,8 @@
       --fg: #000000;
       --muted: #5c5c5c;
       --line: #d4d4d4;
-      --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
-      --sans: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: "Geist Mono", ui-monospace, "SF Mono", Consolas, monospace;
+      --sans: "Geist", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
       color-scheme: light;
     }
     [data-theme="dark"] {
@@ -43,6 +43,8 @@
     html { scroll-behavior: smooth; scroll-padding-top: 70px; }
     body {
       font-family: var(--sans);
+      font-feature-settings: "ss01", "cv11";
+      text-rendering: optimizeLegibility;
       background: var(--bg);
       color: var(--fg);
       line-height: 1.6;
@@ -159,10 +161,23 @@
     .hero h1 {
       font-size: clamp(2.8rem, 8vw, 5.6rem);
       line-height: .98;
-      font-weight: 700;
-      letter-spacing: -.045em;
+      font-weight: 600;
+      letter-spacing: -.05em;
+      min-height: 1.96em; /* reserves two lines so the layout doesn't jump while typing */
+      white-space: pre-line;
       margin-bottom: 1.6rem;
     }
+    .cursor {
+      display: inline-block;
+      width: .07em;
+      height: .85em;
+      margin-left: .06em;
+      background: var(--fg);
+      vertical-align: -.04em;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
     .intro {
       color: var(--muted);
       font-size: 1.05rem;
@@ -225,7 +240,8 @@
     }
     h2 {
       font-size: clamp(1.8rem, 4vw, 2.6rem);
-      letter-spacing: -.03em;
+      font-weight: 600;
+      letter-spacing: -.035em;
       line-height: 1.1;
       margin-bottom: 1.4rem;
     }
@@ -277,7 +293,7 @@
     }
     a.card:hover, .card:hover { background: var(--fg); color: var(--bg); }
     .card .idx { font-family: var(--mono); font-size: .72rem; opacity: .55; }
-    .card h3 { font-size: 1.1rem; letter-spacing: -.01em; }
+    .card h3 { font-size: 1.1rem; font-weight: 600; letter-spacing: -.01em; }
     .card p { font-size: .9rem; opacity: .7; flex: 1; }
     .card .meta {
       display: flex;
@@ -290,7 +306,7 @@
 
     /* Contact */
     .contact { border-top: 1px solid var(--fg); padding-top: .8rem; }
-    .contact h2 { font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: -.045em; margin: 1.2rem 0; }
+    .contact h2 { font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: -.05em; margin: 1.2rem 0; }
     .contact p { color: var(--muted); margin-bottom: 1.8rem; max-width: 460px; }
 
     footer {
@@ -327,6 +343,7 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       * { transition: none !important; }
+      .cursor { animation: none; }
       .reveal { opacity: 1; transform: none; }
     }
   </style>
@@ -358,7 +375,7 @@
     <header class="hero">
       <div>
         <p class="greeting">Hi, I am</p>
-        <h1 id="headline"></h1>
+        <h1 id="headline" aria-label="Ahron John G. Sahagun"><span id="typed" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span></h1>
         <p class="intro" id="intro"></p>
         <div class="actions">
           <a href="#projects" class="btn fill">View projects</a>
@@ -419,7 +436,7 @@
       photo: "photo.jpg",
       location: "Philippines",
 
-      headline: "Ahron John G.<br>Sahagun",
+      headline: "Ahron John G.\nSahagun",
       intro: "I build Java applications with clean OOP design, solid data structures, and database integration.",
       about: "Hi, I'm Ahron John Sahagun, a Computer Science student at Saint Louis University in the Philippines. I enjoy working with Java, solving problems, and building applications that turn ideas into reality. I'm always looking to learn new things, improve my skills, and gain experience as I work toward becoming a Software Engineer.",
 
@@ -501,7 +518,6 @@
        ========================================================= */
     function renderContent() {
       document.title = `${CONFIG.name} | Portfolio`;
-      $("headline").innerHTML = CONFIG.headline;
       $("intro").textContent = CONFIG.intro;
       $("about-text").textContent = CONFIG.about;
       $("fallback").textContent = CONFIG.initials;
@@ -529,6 +545,25 @@
           ? `<a class="card" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`
           : `<div class="card">${inner}</div>`;
       }).join("");
+    }
+
+    /* =========================================================
+       TYPING EFFECT (name in the hero)
+       ========================================================= */
+    function initTyping() {
+      const el = $("typed");
+      const text = CONFIG.headline;
+
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        el.textContent = text;
+        return;
+      }
+
+      let i = 0;
+      (function tick() {
+        el.textContent = text.slice(0, ++i);
+        if (i < text.length) setTimeout(tick, 80 + Math.random() * 70);
+      })();
     }
 
     /* =========================================================
@@ -740,6 +775,7 @@
        ========================================================= */
     renderContent();
     initTheme();
+    initTyping();
     initPortrait();
     initReveal();
   </script>

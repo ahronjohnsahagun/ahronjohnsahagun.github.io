@@ -213,9 +213,8 @@ nav .wrap {
 #portrait {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover;
-  object-position: center bottom;
-  transform: scale(1.25);
-  transform-origin: center bottom;
+  object-position: center top;   /* shows your full head */
+  transform: none;               /* no zoom */
   filter: grayscale(1) contrast(1.05);
 }
 .tag {

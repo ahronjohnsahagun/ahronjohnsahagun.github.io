@@ -23,6 +23,7 @@
 </head>
 
 <body>
+  <div class="progress" id="progress"></div>
 
   <nav>
     <div class="wrap">
@@ -271,11 +272,31 @@
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
     }
 
+    /* Scroll progress bar */
+    function initProgress() {
+      const bar = $("progress");
+      const update = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      };
+      addEventListener("scroll", update, { passive: true });
+      update();
+    }
+
+    /* Stagger index for cards and skills */
+    function initStagger() {
+      document.querySelectorAll(".skills li, .card").forEach((el, i) => {
+        el.style.setProperty("--i", i % 10);
+      });
+    }
+
     renderContent();
     initTheme();
     initTyping();
     initPortrait();
     initReveal();
+    initProgress();
+    initStagger();
   </script>
 
 </body>

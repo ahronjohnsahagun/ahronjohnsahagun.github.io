@@ -206,15 +206,15 @@ nav .wrap {
   aspect-ratio: 4 / 5;
   margin-left: auto;
   border: 1px solid var(--fg);
-  border-radius: 0;          /* no rounded corners, no background behind the photo */
+  border-radius: 0;
   background: none;
   overflow: hidden;
 }
 #portrait {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover;                 /* photo fills the whole frame */
-  object-position: center bottom;    /* keeps shoulders and suit anchored at the bottom */
-  transform: scale(1.25);            /* zooms in to crop out the dark band; raise if still visible */
+  object-fit: cover;
+  object-position: center bottom;
+  transform: scale(1.25);
   transform-origin: center bottom;
   filter: grayscale(1) contrast(1.05);
 }

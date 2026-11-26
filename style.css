@@ -343,6 +343,75 @@ footer {
 .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s, transform .6s; }
 .reveal.visible { opacity: 1; transform: none; }
 
+/* ===== Animations ===== */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+@keyframes drift {
+  to { background-position: 28px 28px; }
+}
+
+/* Drifting dot grid behind the page */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 15%, transparent 70%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 15%, transparent 70%);
+  animation: drift 20s linear infinite;
+}
+
+/* Scroll progress bar */
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 20;
+}
+
+/* Hero entrance */
+.hero > div:first-child > * {
+  animation: rise .8s cubic-bezier(.2, .7, .2, 1) both;
+}
+.hero > div:first-child > :nth-child(1) { animation-delay: .05s; }
+.hero > div:first-child > :nth-child(2) { animation-delay: .15s; }
+.hero > div:first-child > :nth-child(3) { animation-delay: .35s; }
+.hero > div:first-child > :nth-child(4) { animation-delay: .5s; }
+.portrait-wrap {
+  animation: rise .9s cubic-bezier(.2, .7, .2, 1) .3s both,
+             float 6s ease-in-out 1.3s infinite;
+}
+
+/* Pills lift on hover */
+.pill { transition: transform .2s, background .2s; }
+.pill:hover {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--fg) 16%, transparent);
+}
+
+/* Staggered entrance for skills and project cards */
+.reveal.visible .skills li,
+.reveal.visible .card {
+  animation: rise .6s cubic-bezier(.2, .7, .2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* Buttons press feedback */
+.btn:active { transform: scale(.97); }
+
 /* ===== Responsive & accessibility ===== */
 @media (max-width: 820px) {
   .hero { grid-template-columns: 1fr; padding-top: 3rem; }
@@ -360,7 +429,7 @@ footer {
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  * { transition: none !important; }
+  *, *::before { transition: none !important; animation: none !important; }
   .cursor { animation: none; }
   .reveal { opacity: 1; transform: none; }
 }

@@ -1,47 +1,303 @@
-/* Portrait frame: photo fills the border edge to edge */
-.portrait-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4 / 5;          /* matches the portrait shape in your screenshot */
-  overflow: hidden;             /* clips the photo to the border */
-  border: 1px solid var(--border, rgba(128, 128, 128, 0.35));
-  border-radius: 4px;
-  background: #000;
-}
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>Ahron John Sahagun | Portfolio</title>
+  <meta name="description" content="Portfolio of Ahron John Sahagun, Computer Science student.">
 
-.portrait-wrap img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;            /* fills the frame with no gaps or stretching */
-  object-position: center top;  /* keeps the head and face in frame */
-  filter: grayscale(1) contrast(1.05);  /* black & white look; remove if you want color */
-  display: block;
-}
+  <!-- Theme is applied before paint to avoid a flash -->
+  <script>
+    try {
+      var t = localStorage.getItem("theme") ||
+        (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-/* Handle tag sits on the photo, bottom-left */
-.portrait-wrap .tag {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 28px 16px 12px;
-  font-family: "Geist Mono", monospace;
-  font-size: 0.85rem;
-  color: #fff;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
 
-/* Initials fallback when there's no photo */
-.portrait-wrap .fallback { display: none; }
-.portrait-wrap.no-photo img { display: none; }
-.portrait-wrap.no-photo .fallback {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 4rem;
-  font-weight: 600;
-}
+<body>
+  <div class="progress" id="progress"></div>
+
+  <nav>
+    <div class="wrap">
+      <a href="#" class="brand">PORTFOLIO</a>
+
+      <div class="nav-right">
+        <div class="links">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <button class="toggle" id="theme-toggle" type="button" aria-label="Switch theme" title="Switch theme">
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <header class="hero">
+      <div>
+        <p class="greeting">Hi, I am</p>
+        <h1 id="headline" aria-label="Ahron John G. Sahagun"><span id="typed" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span></h1>
+
+        <div class="intro">
+          <p>
+            I'm a
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Computer Science</span>
+            student. I build
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg>Java apps</span>
+            &amp;
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>database systems</span>,
+            and these days I'm focused on
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>data structures &amp; algorithms</span>.
+          </p>
+          <p>
+            Right now I'm building
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>school projects</span>
+            every day. I love turning
+            <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>rough ideas</span>
+            into things people actually use.
+          </p>
+          <div class="social">
+            <a id="link-gh" href="#" target="_blank" rel="noopener">github ↗</a>
+            <a id="link-mail" href="#" target="_blank" rel="noopener">email ↗</a>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="#projects" class="btn fill">View projects</a>
+          <a href="#contact" class="btn">Contact me</a>
+        </div>
+      </div>
+
+      <div class="portrait-wrap" id="portrait-wrap">
+        <img id="portrait" alt="Portrait of Ahron John Sahagun">
+        <div class="fallback" id="fallback"></div>
+        <span class="tag" id="tag"></span>
+      </div>
+    </header>
+
+    <div class="strip reveal" id="strip"></div>
+
+    <section id="about" class="reveal">
+      <div class="sec-head"><span class="label">01 / About</span></div>
+      <h2>A bit about me</h2>
+      <p class="about-text" id="about-text"></p>
+      <ul class="skills" id="skills"></ul>
+    </section>
+
+    <section id="projects" class="reveal">
+      <div class="sec-head"><span class="label">02 / Projects</span></div>
+      <h2>Things I've built</h2>
+      <div class="grid" id="project-grid"></div>
+    </section>
+
+    <section id="contact" class="reveal">
+      <div class="contact">
+        <span class="label">03 / Contact</span>
+        <h2>Let's work together.</h2>
+        <p>Open to internships, collaborations, and new ideas.</p>
+        <div class="actions">
+          <a class="btn fill" id="email-btn" href="#" target="_blank" rel="noopener">Send an email</a>
+          <a class="btn" id="gh-btn" href="#" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> <span id="footer-name"></span></span>
+      <span>Built with HTML, CSS &amp; JavaScript</span>
+    </footer>
+
+  </main>
+
+  <script>
+    /* Configuration: edit details here */
+    const CONFIG = {
+      githubUser: "ahronjohnsahagun",
+      name: "Ahron John Sahagun",
+      handle: "ahronjohnsahagun",
+      initials: "AJ",
+      photo: "photo.png",
+      location: "Philippines",
+
+      headline: "Ahron John G.\nSahagun",
+      about: "Hi, I'm Ahron John Sahagun, a Computer Science student at Saint Louis University in the Philippines. I enjoy working with Java, solving problems, and building applications that turn ideas into reality. I'm always looking to learn new things, improve my skills, and gain experience as I work toward becoming a Software Engineer.",
+
+      info: [
+        ["Based in", "Philippines"],
+        ["Studying", "Computer Science"],
+        ["Focus", "Java, Software Engineering"]
+      ],
+
+      skills: [
+        "Java Programming Fundamentals",
+        "Object-Oriented Programming (OOP)",
+        "Data Structures and Algorithms",
+        "Java Collections Framework",
+        "Exception Handling",
+        "File Handling and I/O",
+        "Database Connectivity (JDBC & MySQL)",
+        "CRUD Operations",
+        "Debugging and Troubleshooting",
+        "Git and GitHub Version Control"
+      ],
+
+      email: "ahron.sahagun2008@gmail.com",
+
+      /* A "link" value makes a card clickable */
+      projects: [
+        { name: "Airline Reservation System", desc: "A Java application concept for searching flights, managing passenger details, selecting seats, and handling reservations.", tags: ["Java", "JDBC", "Collections"], link: "" },
+        { name: "Student Ranking System", desc: "Manages student records and grades, then sorts and displays rankings using CSV file handling.", tags: ["Java", "File I/O", "Sorting"], link: "" },
+        { name: "Library Management System", desc: "Manages book records, search, borrowing, returns, and library inventory.", tags: ["Java", "Swing", "Collections"], link: "" },
+        { name: "Banking Management System", desc: "Simulates bank account management, deposits, withdrawals, and transaction records.", tags: ["Java", "Exceptions", "File I/O"], link: "" },
+        { name: "Inventory Management System", desc: "Tracks products, stock levels, inventory updates, and basic reports.", tags: ["Java", "JDBC", "Collections"], link: "" },
+        { name: "Employee Payroll Management System", desc: "Maintains employee records and calculates salaries, allowances, and deductions.", tags: ["Java", "Swing", "JDBC"], link: "" },
+        { name: "Hotel Reservation System", desc: "Manages room availability, guest details, reservations, check-in, and check-out records.", tags: ["Java", "JavaFX", "JDBC"], link: "" },
+        { name: "Student Enrollment System", desc: "Handles student registration, subject selection, and enrollment records.", tags: ["Java", "JDBC", "MVC"], link: "" },
+        { name: "Point of Sale (POS) System", desc: "Provides a product catalog, shopping cart, checkout, receipt generation, and sales tracking.", tags: ["Java", "Swing", "JDBC"], link: "" },
+        { name: "Task Management System", desc: "Organizes tasks with priorities, deadlines, and completion statuses.", tags: ["Java", "Swing", "Collections"], link: "" }
+      ]
+    };
+
+    /* Helpers */
+    const $ = (id) => document.getElementById(id);
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const pad = (n) => String(n + 1).padStart(2, "0");
+
+    /* Theme toggle */
+    function applyTheme(theme, save) {
+      document.documentElement.dataset.theme = theme;
+      document.querySelector('meta[name="theme-color"]')
+        .setAttribute("content", theme === "dark" ? "#000000" : "#ffffff");
+      $("theme-toggle").setAttribute("aria-label",
+        theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      if (save) { try { localStorage.setItem("theme", theme); } catch (e) {} }
+    }
+
+    function initTheme() {
+      applyTheme(document.documentElement.dataset.theme || "dark", false);
+
+      $("theme-toggle").addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        applyTheme(next, true);
+      });
+
+      // Follows system changes until a theme is picked manually
+      matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        let saved = null;
+        try { saved = localStorage.getItem("theme"); } catch (err) {}
+        if (!saved) applyTheme(e.matches ? "dark" : "light", false);
+      });
+    }
+
+    /* Static content */
+    function renderContent() {
+      document.title = `${CONFIG.name} | Portfolio`;
+      $("about-text").textContent = CONFIG.about;
+      $("fallback").textContent = CONFIG.initials;
+      $("tag").textContent = `@${CONFIG.handle} · ${CONFIG.location}`;
+      $("footer-name").textContent = CONFIG.name;
+      $("year").textContent = new Date().getFullYear();
+
+      const mail = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(CONFIG.email);
+      const gh = "https://github.com/" + CONFIG.githubUser;
+      $("email-btn").href = mail;
+      $("gh-btn").href = gh;
+      $("link-mail").href = mail;
+      $("link-gh").href = gh;
+
+      $("skills").innerHTML = CONFIG.skills
+        .map((s, i) => `<li><span>${pad(i)}</span>${esc(s)}</li>`).join("");
+
+      $("strip").innerHTML = CONFIG.info
+        .map(([k, v]) => `<div><span class="label">${esc(k)}</span><b>${esc(v)}</b></div>`).join("");
+
+      $("project-grid").innerHTML = CONFIG.projects.map((p, i) => {
+        const inner = `
+          <span class="idx">${pad(i)}</span>
+          <h3>${esc(p.name)}</h3>
+          <p>${esc(p.desc)}</p>
+          <div class="meta">${p.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div>`;
+        return p.link
+          ? `<a class="card" href="${esc(p.link)}" target="_blank" rel="noopener">${inner}</a>`
+          : `<div class="card">${inner}</div>`;
+      }).join("");
+    }
+
+    /* Typing effect for the hero name */
+    function initTyping() {
+      const el = $("typed");
+      const text = CONFIG.headline;
+
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        el.textContent = text;
+        return;
+      }
+
+      let i = 0;
+      (function tick() {
+        el.textContent = text.slice(0, ++i);
+        if (i < text.length) setTimeout(tick, 80 + Math.random() * 70);
+      })();
+    }
+
+    /* Portrait: falls back to initials if the image fails to load */
+    function initPortrait() {
+      const img = $("portrait");
+      const wrap = $("portrait-wrap");
+      img.onerror = () => wrap.classList.add("no-photo");
+      img.src = CONFIG.photo;
+    }
+
+    /* Scroll reveal */
+    function initReveal() {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    }
+
+    /* Scroll progress bar */
+    function initProgress() {
+      const bar = $("progress");
+      const update = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      };
+      addEventListener("scroll", update, { passive: true });
+      update();
+    }
+
+    /* Stagger index for cards and skills */
+    function initStagger() {
+      document.querySelectorAll(".skills li, .card").forEach((el, i) => {
+        el.style.setProperty("--i", i % 10);
+      });
+    }
+
+    renderContent();
+    initTheme();
+    initTyping();
+    initPortrait();
+    initReveal();
+    initProgress();
+    initStagger();
+  </script>
+
+</body>
+</html>

@@ -198,7 +198,7 @@ nav .wrap {
 
 .actions { display: flex; flex-wrap: wrap; gap: .7rem; }
 
-/* Portrait */
+/* Portrait: whole photo shown inside the border, white blends with the photo */
 .portrait-wrap {
   position: relative;
   width: 100%;
@@ -206,12 +206,15 @@ nav .wrap {
   aspect-ratio: 4 / 5;
   margin-left: auto;
   border: 1px solid var(--fg);
+  border-radius: 0;
+  background: #ffffff;
   overflow: hidden;
 }
 #portrait {
   position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center 20%;
+  object-fit: contain;           /* shows the full photo, nothing cut off */
+  object-position: center bottom; /* suit sits on the bottom edge */
+  transform: none;
   filter: grayscale(1) contrast(1.05);
 }
 .tag {
@@ -220,8 +223,8 @@ nav .wrap {
   font-family: var(--mono);
   font-size: .7rem;
   padding: .35rem .7rem;
-  background: var(--fg);
-  color: var(--bg);
+  background: #000;
+  color: #fff;
 }
 .fallback {
   display: none;
@@ -231,6 +234,7 @@ nav .wrap {
   justify-content: center;
   font-size: 5rem;
   font-weight: 700;
+  color: #000;
 }
 .no-photo #portrait { display: none; }
 .no-photo .fallback { display: flex; }
